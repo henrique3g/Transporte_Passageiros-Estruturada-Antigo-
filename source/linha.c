@@ -103,25 +103,37 @@ void consultarHorarios(){
 
 fpos_t pesquisarLinha(Linha *lin){
     fpos_t pos = 0;
+    int cod = -1;
     char cid[30];
     Hora hora;
-    printf("Cidade: ");
+    printf("Cidade(Nome ou Codígo): ");
     fgets(cid, sizeof(cid), stdin);
     fflush(stdin);
     rmvLn(cid);
-    toUpperCase(cid);
-
-    printf("Horário de partida: ");
-    scanf("%d:%d", &hora.h, &hora.m);
+    if(isNum(cid)){
+        cod = atoi(cid);
+    }else{
+        toUpperCase(cid);
+        printf("Horário de partida: ");
+        scanf("%d:%d", &hora.h, &hora.m);
+    }
     fflush(stdin);
 
     flin = fopen(bdlin, "rb");
 
     while(fread(lin, sizeof(Linha), 1, flin)){
-        if(!strcmp(cid, lin->cid)){
-            if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
+       
+        if(cod != -1){
+            if((cod == lin->cod) && lin->ativo == 1){
                 fclose(flin);
                 return pos;
+            }
+        }else{
+            if(!strcmp(cid, lin->cid)){
+                if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
+                    fclose(flin);
+                    return pos;
+                }
             }
         }
         fgetpos(flin, &pos);
@@ -141,7 +153,7 @@ void removerLinha(){
         getchar();
     }else if(pos != -1){
         mostrarLinha(lin);
-        printf("\n1 - Excluir  2 - Sair\nOpção: ");
+        printf("\n1 - Excluir  0 - Sair\nOpção: ");
         scanf("%d", &op);
         if(op == 1){
             fflush(stdin);
@@ -172,7 +184,7 @@ void alterarLinha(){
         do{
 			cls();
 			mostrarLinha(lin);
-			printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  (4 - Salvar  0 - Sair)\nOpção: ");
+			printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  (4 - Salvar  0 - Cancelar)\nOpção: ");
 			scanf("%d", &op);
 			alterarLin(&lin, &op);
 			if(op == 4){
@@ -181,6 +193,7 @@ void alterarLinha(){
 				fsetpos(flin, &pos);
 				if(fwrite(&lin, sizeof(Linha), 1, flin)){
 					printf("Linha alterado com sucesso!");
+                    op = 0;
 				}else {
 					printf("Erro ao alterar linha!\n");
 				}
@@ -214,17 +227,19 @@ void listarLinhas(){
 
 void alterarLin(Linha *lin, int *op){
 	cls();
-    if(op == 1){
+    if(*op == 1){
         printf("Cidade: ");
         fgets(lin->cid, sizeof(lin->cid), stdin);
         rmvLn(lin->cid);
         fflush(stdin);
-    }else if(op == 2){
+        *op = -1;
+    }else if(*op == 2){
         printf("Horário de partida: ");
         scanf("%d:%d", &lin->hora.h, &lin->hora.m);
-    }else if(op == 3){
+        *op = -1;
+    }else if(*op == 3){
         printf("Valor da passagem: ");
     	scanf("%f", &lin->vlr);
-    }  
-	*op = -1; 
+        *op = -1;
+    } 
 }

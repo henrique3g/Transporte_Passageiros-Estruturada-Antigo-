@@ -35,3 +35,16 @@ void toLower(char *c){
     if(*c > 64 && *c < 91)
         *c += 32;
 }
+
+int isNum(char *s){
+    for(int i = 0; i < strlen(s); i++)
+        if(!isCharNum(s[i]))
+            return 0;
+    return 1;
+}
+
+int isCharNum(char c){
+    if(c > 47 && c < 57)
+        return 1;
+    return 0;
+}
