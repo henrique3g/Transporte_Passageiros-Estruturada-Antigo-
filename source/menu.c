@@ -3,6 +3,7 @@
 void menu(){
     int op;
     do{
+        op = -1;
         cls();
         printf("////////////////////////////////\n");
         printf("//             MENU           //\n");    
@@ -10,10 +11,11 @@ void menu(){
         printf("1 - Inserir linha\n");
         printf("2 - Remover linha\n");
         printf("3 - Alterar linha\n");
-        printf("4 - Consultar horários\n");
-        printf("5 - Consultar assento disponivel\n");
-        printf("6 - Relatórios\n");
-        printf("7 - Ler reservas de arquivos texto\n");
+        printf("4 - Listar linhas\n");
+        printf("5 - Consultar horários\n");
+        printf("6 - Consultar assento disponivel\n");
+        printf("7 - Relatórios\n");
+        printf("8 - Ler reservas de arquivos texto\n");
         printf("0 - Sair\n");
         printf("OPÇÃO: ");
         scanf("%d", &op);
@@ -39,23 +41,25 @@ void opcao(int op){
             removerLinha();
             break;
         case 3:
+            cls();
             printf("//////////////////////////////\n");
             printf("//      Alterar Linha       //\n");
             printf("//////////////////////////////\n");
-            
+            alterarLinha();
             break;
         case 4:
+            cls();
+            printf("//////////////////////////////\n");
+            printf("//      Listar Linhas       //\n");
+            printf("//////////////////////////////\n");
+            listarLinhas();
+            break;
+        case 5:
             cls();
             printf("//////////////////////////////\n");
             printf("//     Consular Horários    //\n");
             printf("//////////////////////////////\n");
             consultarHorarios();
-            break;
-        case 5:
-            printf("//////////////////////////////\n");
-            printf("//     Cadastrar Linha      //\n");
-            printf("//////////////////////////////\n");
-            
             break;
         case 6:
             printf("//////////////////////////////\n");

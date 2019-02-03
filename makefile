@@ -17,6 +17,7 @@ CC=gcc
 CC_FLAGS=-c         \
          -W         \
          -Wall      \
+         -g      \
          -pedantic
  
 # Comando usado no alvo limpo
@@ -46,7 +47,8 @@ $(PROJ_NAME): $(OBJ)
 objFolder:
 	@ mkdir objects
  
-clean:
-	rm -rf ./objects/*.o
- 
 .PHONY: all clean
+
+clean:
+	rm -rf ./objects/*.o 
+ 

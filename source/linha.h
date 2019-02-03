@@ -29,7 +29,9 @@ void alterarLinha();
 void removerLinha();
 void mostrarLinha();
 void consultarHorarios();
-fpos_t pesquisarLinha();
+fpos_t pesquisarLinha(Linha *lin);
 int getCodLin();
+void listarLinhas();
+void alterarLin(Linha *lin, int *op);
 
 #endif

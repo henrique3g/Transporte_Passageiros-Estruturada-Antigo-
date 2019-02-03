@@ -42,18 +42,8 @@ void cadastrarLinha(){
             mostrarLinha(lin);
             printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  4 - voltar\nOpção: ");
             scanf("%d", &op);
-            if(op == 1){
-                printf("Cidade: ");
-                fgets(lin.cid, sizeof(lin.cid), stdin);
-                rmvLn(lin.cid);
-                fflush(stdin);
-            }else if(op == 2){
-                printf("Horário de partida: ");
-                scanf("%d:%d", &lin.hora.h, &lin.hora.m);
-            }else if(op == 3){
-                printf("Valor da passagem: ");
-                scanf("%f", &lin.vlr);
-            }
+			fflush(stdin);
+            alterarLin(&lin, &op);
         } else if(op == 3){
             printf("Voltando ao menu...");
             getchar();            
@@ -65,9 +55,12 @@ void cadastrarLinha(){
 }
 
 void mostrarLinha(Linha lin){
+	char h[6];
     printf("\nCodigo: %d",lin.cod);
+    printf("\nSituação: %s",lin.ativo == 1?"ATIVO":"INATIVO");
     printf("\nCidade: %s", lin.cid);
-    printf("\nHorário de partida: %d:%d", lin.hora.h, lin.hora.m);
+	sprintf(h, "%02d:%02d",lin.hora.h, lin.hora.m);
+    printf("\nHorário de partida: %s", h);
     printf("\nValor da passagem: %.2f R$\n", lin.vlr);
 }
 
@@ -97,22 +90,21 @@ void consultarHorarios(){
         printf("Erro! Não existe linhas cadastradas!\n");
     }else{
         while(fread(&lin, sizeof(lin), 1, flin)){
-            if((!strncmp(lin.cid, cid, strlen(cid))) && lin.ativo == 1){
-                printf("\n%d:%d\t%.2f R$",lin.hora.h,lin.hora.m,lin.vlr);
+            if((!strcmp(lin.cid, cid)) && lin.ativo == 1){
+                printf("%d:%d\t%.2f R$\n",lin.hora.h,lin.hora.m,lin.vlr);
                 est = 1;
             }
         }
-        if(!est)    printf("Não foi encontrado cidade com esse nome!\n");
+        if(!est)    printf("Cidade não encontrada!\n");
         getchar();
     }
 
 }
 
 fpos_t pesquisarLinha(Linha *lin){
-    fpos_t pos;
+    fpos_t pos = 0;
     char cid[30];
     Hora hora;
-
     printf("Cidade: ");
     fgets(cid, sizeof(cid), stdin);
     fflush(stdin);
@@ -121,14 +113,13 @@ fpos_t pesquisarLinha(Linha *lin){
 
     printf("Horário de partida: ");
     scanf("%d:%d", &hora.h, &hora.m);
+    fflush(stdin);
 
     flin = fopen(bdlin, "rb");
-    fgetpos(flin, &pos);
 
-    while(fread(&lin, sizeof(lin), 1, flin)){
+    while(fread(lin, sizeof(Linha), 1, flin)){
         if(!strcmp(cid, lin->cid)){
             if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
-
                 fclose(flin);
                 return pos;
             }
@@ -141,22 +132,99 @@ fpos_t pesquisarLinha(Linha *lin){
 }
 
 void removerLinha(){
-    flin = fopen(bdlin, "ab");
+    int op;
     Linha lin;
     fpos_t pos = pesquisarLinha(&lin);
-    if(pos != -1){
-        fsetpos(flin, &pos);
-        fflush(stdin);
-        lin.ativo = 0;
-        if(fwrite(&lin, sizeof(lin), 1, flin)){
-            printf("Arquivo excluido com sucesso!");
-            getchar();
-        }
-        printf("Erro ao remover linha!\n");
+    flin = fopen(bdlin, "r+b");
+    if(flin == NULL){
+        printf("Erro ao abrir bd!\n");
         getchar();
-        fclose(flin);
+    }else if(pos != -1){
+        mostrarLinha(lin);
+        printf("\n1 - Excluir  2 - Sair\nOpção: ");
+        scanf("%d", &op);
+        if(op == 1){
+            fflush(stdin);
+            lin.ativo = 0;
+            fsetpos(flin, &pos);
+            if(fwrite(&lin, sizeof(Linha), 1, flin)){
+            	printf("Linha excluida com sucesso!");
+        	}else {
+            	printf("Erro ao remover linha!\n");
+        	}
+        	getchar();
+        	fclose(flin);
+        }
     }else {
-        printf("Linha não encontrada!");
+		printf("Linha não encontrada!");
         getchar();
     }
+}
+void alterarLinha(){
+    int op;
+    Linha lin;
+    fpos_t pos = pesquisarLinha(&lin);
+    flin = fopen(bdlin, "r+b");
+    if(flin == NULL){
+        printf("Erro ao abrir bd!\n");
+        getchar();
+    }else if(pos != -1){
+        do{
+			cls();
+			mostrarLinha(lin);
+			printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  (4 - Salvar  0 - Sair)\nOpção: ");
+			scanf("%d", &op);
+			alterarLin(&lin, &op);
+			if(op == 4){
+				fflush(stdin);
+				
+				fsetpos(flin, &pos);
+				if(fwrite(&lin, sizeof(Linha), 1, flin)){
+					printf("Linha alterado com sucesso!");
+				}else {
+					printf("Erro ao alterar linha!\n");
+				}
+				getchar();
+				fclose(flin);
+			}
+		} while (op != 0);
+	}else {
+		printf("Linha não encontrada!");
+		getchar();
+	}
+      
+}
+
+void listarLinhas(){
+    flin = fopen(bdlin, "rb");
+    Linha lin;
+    int count=0;
+    while(fread(&lin, sizeof(lin), 1, flin)){
+        if(lin.ativo == 1){
+            mostrarLinha(lin);
+            count = 1;
+        }
+    }
+    if(!count){
+        printf("\nNão existe linhas cadastradas!\n");
+    }
+    getchar();
+}
+
+
+void alterarLin(Linha *lin, int *op){
+	cls();
+    if(op == 1){
+        printf("Cidade: ");
+        fgets(lin->cid, sizeof(lin->cid), stdin);
+        rmvLn(lin->cid);
+        fflush(stdin);
+    }else if(op == 2){
+        printf("Horário de partida: ");
+        scanf("%d:%d", &lin->hora.h, &lin->hora.m);
+    }else if(op == 3){
+        printf("Valor da passagem: ");
+    	scanf("%f", &lin->vlr);
+    }  
+	*op = -1; 
 }
