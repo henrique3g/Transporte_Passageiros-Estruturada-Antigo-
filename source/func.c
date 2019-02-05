@@ -1,10 +1,23 @@
 #include "func.h"
 
-void cls(){
+/*void cls(){
+    system("cls");
+
+}*/
+ void cls(){
     #ifdef __unix__
         system("clear");
     #elif defined(_WIN32) || defined(WIN32)
         system("cls");
+    #endif
+} 
+
+void clearBuf(){
+    #ifdef __unix__
+        __fpurge(stdin);
+        
+    #elif defined(_WIN32) || defined(WIN32)
+        fflush(stdin);
     #endif
 }
 
@@ -37,7 +50,7 @@ void toLower(char *c){
 }
 
 int isNum(char *s){
-    for(int i = 0; i < strlen(s); i++)
+    for(unsigned int i = 0; i < strlen(s); i++)
         if(!isCharNum(s[i]))
             return 0;
     return 1;
@@ -47,4 +60,8 @@ int isCharNum(char c){
     if(c > 47 && c < 57)
         return 1;
     return 0;
+}
+
+void lerData(Data *d){
+	scanf("%2d/%2d/%4d", &d->dia, &d->mes, &d->ano);
 }

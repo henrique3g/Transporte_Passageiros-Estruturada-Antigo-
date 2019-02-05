@@ -5,7 +5,7 @@
 #include <string.h>
 #include "func.h"
 #include "linha.h"
-
+#include "onibus.h"
 void menu();
 void opcao(int op);
 #endif

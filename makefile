@@ -26,29 +26,33 @@ RM = rm -rf
 #
 # Compilação e vinculação
 #
-all: objFolder $(PROJ_NAME)
+all: clean objFolder $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Construindo binários usando o linker GCC: $@'
 	$(CC) $^ -o $@
 	@ echo 'Termidado construção de binario: $@'
 	@ echo ' '
- 
+
 ./objects/%.o: ./source/%.c ./source/%.h
-	@ echo 'Construindo o alvo usando o compilador GCC: $<'
+	@ echo 'Construindo os objetos .o com GCC: $<'
 	$(CC) $< $(CC_FLAGS) -o $@
 	@ echo ' '
- 
+
 ./objects/main.o: ./source/main.c $(H_SOURCE)
-	@ echo 'Construindo o alvo usando o compilador GCC: $<'
+	@ echo 'Construindo o main.o com GCC: $<'
 	$(CC) $< $(CC_FLAGS) -o $@
 	@ echo ' '
- 
+
 objFolder:
 	@ mkdir objects
- 
-.PHONY: all clean
+
 
 clean:
-	rm -rf ./objects/*.o 
- 
+# Linux
+# @ $(RM) ./objects/*.o $(PROJ_NAME) *~
+# @ rmdir objects
+# Windows
+	@ rd objects /s /q
+	@ del Sistema.exe
+.PHONY: all clean

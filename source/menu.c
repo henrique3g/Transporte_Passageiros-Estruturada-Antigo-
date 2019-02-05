@@ -19,7 +19,7 @@ void menu(){
         printf("0 - Sair\n");
         printf("OPÇÃO: ");
         scanf("%d", &op);
-        fflush(stdin);
+        clearBuf();
         opcao(op);
     }while(op != 0);
 }
@@ -62,15 +62,24 @@ void opcao(int op){
             consultarHorarios();
             break;
         case 6:
+            cls();
             printf("//////////////////////////////\n");
-            printf("//     Cadastrar Linha      //\n");
+            printf("//    Consultar Assentos    //\n");
+            printf("//////////////////////////////\n");
+            consultarAssentos();
+            break;
+        case 7:
+            cls();
+            printf("//////////////////////////////\n");
+            printf("//        Relatórios        //\n");
             printf("//////////////////////////////\n");
             
             break;
-        case 7:
-            printf("//////////////////////////////\n");
-            printf("//     Cadastrar Linha      //\n");
-            printf("//////////////////////////////\n");
+        case 8:
+            cls();
+            printf("///////////////////////////////////\n");
+            printf("// Ler reservas de arquivo texto //\n");
+            printf("///////////////////////////////////\n");
             
             break;
         case 0:

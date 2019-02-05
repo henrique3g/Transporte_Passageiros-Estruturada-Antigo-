@@ -9,14 +9,9 @@
 #define bdlin "bd/linhas.bin"
 
 FILE *flin;
-typedef struct {
-    int h;
-    int m;
-} Hora;
-
 
 typedef struct {
-    int cod;
+    int id;
     char cid[30];
     Hora hora;
     float vlr;
@@ -28,8 +23,9 @@ void cadastrarLinha();
 void alterarLinha();
 void removerLinha();
 void mostrarLinha();
+void mostrarLinhaS();
 void consultarHorarios();
-fpos_t pesquisarLinha(Linha *lin);
+int pesquisarLinha(Linha *lin);
 int getCodLin();
 void listarLinhas();
 void alterarLin(Linha *lin, int *op);
