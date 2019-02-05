@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 typedef struct {
 	int dia;
 	int mes;
@@ -26,4 +26,9 @@ int isCharNum(char c);
 void lerData(Data *d);
 int isPar(int n);
 void clearBuf();
+Data getData();
+Hora getHora();
+int getDiaSemana();
+int getDiaSemanaE(Data d);
+
 #endif

@@ -22,4 +22,6 @@ void iniciarAssetos(Onibus *o);
 int verificaAssento(Onibus o, int a);
 void reservarAssento(Onibus o, int ass);
 int getCodOni();
+int getTotReserva(Onibus o);
+
 #endif

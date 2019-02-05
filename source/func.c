@@ -44,6 +44,12 @@ void toUpper(char *c){
         *c -= 32;
 }
 
+int isPar(int n){
+    if(n % 2)
+        return 0;
+    return 1;
+}
+
 void toLower(char *c){
     if(*c > 64 && *c < 91)
         *c += 32;
@@ -64,4 +70,104 @@ int isCharNum(char c){
 
 void lerData(Data *d){
 	scanf("%2d/%2d/%4d", &d->dia, &d->mes, &d->ano);
+}
+
+Data getData(){
+    Data d;
+    time_t t;
+    int b[3];
+    char s[4];
+    time(&t);
+    sscanf(ctime(&t), "%3s %3s %2d %2d:%2d:%2d %4d", s, s, &d.dia, &b[0], &b[1], &b[2], &d.ano);
+    d.mes = formatMes(s);
+    return d;
+}
+
+int formatMes(char *s){
+    if(!strcmp(s, "Jan"))
+        return 1;
+    else if(!strcmp(s, "Feb"))
+        return 2;
+    else if(!strcmp(s, "Mar"))
+        return 3;
+    else if(!strcmp(s, "Apr"))
+        return 4;
+    else if(!strcmp(s, "May"))
+        return 5;
+    else if(!strcmp(s, "Jun"))
+        return 6;
+    else if(!strcmp(s, "Jul"))
+        return 7;
+    else if(!strcmp(s, "Aug"))
+        return 8;
+    else if(!strcmp(s, "Sep"))
+        return 9;
+    else if(!strcmp(s, "Oct"))
+        return 10;
+    else if(!strcmp(s, "Nov"))
+        return 11;
+    else if(!strcmp(s, "Dec"))
+        return 12;
+}
+Hora getHora(){
+    Hora h;
+    time_t t;
+    int b;
+    char s[5];
+    time(&t);
+    sscanf(ctime(&t), "%3s %3s %2d %2d:%2d:%2d %4d", s, s, &b, &h.h, &h.m, &b, &b);
+    return h;
+}
+
+int getDiaSemana(){
+    time_t t;
+    time(&t);
+    char d[4];
+    strncpy(d, ctime(&t), 3);
+    d[3] = '\0';
+    if(!strcmp(d, "Sun")){
+        return 1;
+    }else if(!strcmp(d, "Mon")){
+        return 2;
+    }else if(!strcmp(d, "Tue")){
+        return 3;
+    }else if(!strcmp(d, "Wed")){
+        return 4;
+    }else if(!strcmp(d, "Thu")){
+        return 5;
+    }else if(!strcmp(d, "Fri")){
+        return 6;
+    }else if(!strcmp(d, "Sat")){
+        return 7;
+    }
+}
+
+int getDiaSemanaE(Data d){
+    int dia = getDiaSemana(); // = 5
+    int dif = diffDate(d, getData());
+    
+    if(dif < 0){
+        for(int i = 1; i <= abs(dif); i++){
+            dia++;
+            if(dia > 7)
+                dia = 1;
+        }
+    }else{
+        for(int i = 1; i <= dif; i++){
+            dia--;
+            if(dia < 7)
+                dia = 7;
+        }
+    }
+    
+    return dia;
+}
+
+int diffDate(Data i, Data f){
+    int d;
+    if(i.mes == f.mes){
+        d = f.dia - i.dia;
+        return d;
+    }
+
 }

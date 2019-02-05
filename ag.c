@@ -29,7 +29,6 @@ void limpar(){
     system("del Sistema.exe");
 }
 void compilar(){
-    limpar();
     system("make");
 }
 void execultar(){

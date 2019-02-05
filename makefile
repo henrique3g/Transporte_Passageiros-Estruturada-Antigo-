@@ -26,7 +26,7 @@ RM = rm -rf
 #
 # Compilação e vinculação
 #
-all: clean objFolder $(PROJ_NAME)
+all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Construindo binários usando o linker GCC: $@'

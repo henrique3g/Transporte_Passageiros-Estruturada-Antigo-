@@ -21,21 +21,25 @@ void consultarAssentos(){
 			if(ass >= 1 && ass <= 20){
 				if(verificaAssento(on, ass)){
 					reservarAssento(on,ass);
+					getchar();
 				}else{
 					printf("Assento ocupado!\n");
+					getchar();
 				}
 			}else if(ass != 0){
 				printf("Assento Invalido!");
+				getchar();
 			}
 		}else{
 			printf("Todos os assentos estão ocupados!\n");
-
+			getchar();
 		}
 	}else {
 		printf("Linha não encontrada!\n");
+		getchar();
 	}
 	fflush(stdin);
-	getchar();
+	
 }
 
 int mostrarAssentos(Onibus o){
@@ -127,4 +131,13 @@ int getCodOni(){
         id++;
     }
     return id+1;
+}
+
+int getTotReserva(Onibus o){
+	int soma = 0;
+	for(int i = 0; i < 20; i++){
+		if(o.ass[i] == -1)
+			soma++;
+	}
+	return soma;
 }
