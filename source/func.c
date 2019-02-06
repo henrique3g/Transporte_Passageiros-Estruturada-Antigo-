@@ -13,12 +13,15 @@
 } 
 
 void clearBuf(){
-    #ifdef __unix__
+    /* #ifdef __unix__
         __fpurge(stdin);
         
     #elif defined(_WIN32) || defined(WIN32)
         fflush(stdin);
-    #endif
+    #endif */
+    char c;
+    while((c = getchar()) != '\n' && c != EOF);
+
 }
 
 void rmvLn(char *s){
@@ -70,6 +73,7 @@ int isCharNum(char c){
 
 void lerData(Data *d){
 	scanf("%2d/%2d/%4d", &d->dia, &d->mes, &d->ano);
+    clearBuf();
 }
 
 Data getData(){

@@ -16,7 +16,7 @@ void menu(){
         printf("8 - Ler reservas de arquivos texto\n");
         printf("0 - Sair\n");
         printf("OPÇÃO: ");
-        clearBuf();
+        // clearBuf();
         scanf("%1d", &op);
         clearBuf();
         opcao(op);

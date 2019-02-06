@@ -7,12 +7,10 @@ void cadastrarLinha(){
     FILE *flin = fopen(bdlin, "ab");
     lin.id = getCodLin();
     printf("Codigo: %d\n", lin.id);
-    clearBuf();
     printf("Cidade: ");
     fgets(lin.cid, sizeof(lin.cid), stdin);
     toUpperCase(lin.cid);
     rmvLn(lin.cid);
-    clearBuf();
 
     printf("Horário de partida: ");
     scanf("%2d:%2d", &lin.hora.h, &lin.hora.m);
@@ -30,6 +28,7 @@ void cadastrarLinha(){
         mostrarLinha(lin);
         printf("1 - Salvar  2 - Alterar  0 - Voltar\nOpção: ");
         scanf("%1d", &op);
+        clearBuf();
         if(op == 1){
             if(fwrite(&lin, sizeof(lin), 1, flin)){
                 printf("Linha cadastrada com sucesso!\n");
@@ -98,7 +97,6 @@ void consultarHorarios(){
     Linha lin;
     printf("Cidade: ");
     fgets(cid, sizeof(cid), stdin);
-    clearBuf();
     rmvLn(cid);
     toUpperCase(cid);
 
@@ -125,7 +123,6 @@ int pesquisarLinha(Linha *lin){
     Hora hora;
     printf("Cidade(Nome ou Código): ");
     fgets(cid, sizeof(cid), stdin);
-    clearBuf();
     rmvLn(cid);
     if(isNum(cid)){
         cod = atoi(cid);
@@ -133,8 +130,8 @@ int pesquisarLinha(Linha *lin){
         toUpperCase(cid);
         printf("Horário de partida: ");
         scanf("%2d:%2d", &hora.h, &hora.m);
+        clearBuf();
     }
-    clearBuf();
 
     FILE *flin = fopen(bdlin, "rb");
 
@@ -172,8 +169,8 @@ void removerLinha(){
         mostrarLinha(lin);
         printf("\n1 - Excluir  0 - Voltar\nOpção: ");
         scanf("%1d", &op);
+        clearBuf();
         if(op == 1){
-            clearBuf();
             lin.ativo = 0;
             fseek(flin, pos, SEEK_SET);
             if(fwrite(&lin, sizeof(Linha), 1, flin)){
@@ -206,8 +203,8 @@ void alterarLinha(){
 			mostrarLinha(lin);
 			printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  (4 - Salvar  0 - Cancelar)\nOpção: ");
 			scanf("%1d", &op);
+			clearBuf();
 			if(op == 4){
-				clearBuf();
 				
 				fseek(flin, pos, SEEK_SET);
 				if(fwrite(&lin, sizeof(Linha), 1, flin)){
@@ -242,7 +239,6 @@ void listarLinhas(){
     if(!count){
         printf("\nNão existe linhas cadastradas!\n");
     }
-    clearBuf();
     getchar();
 }
 
@@ -253,7 +249,6 @@ void alterarLin(Linha *lin, int *op){
         printf("Cidade: ");
         fgets(lin->cid, sizeof(lin->cid), stdin);
         rmvLn(lin->cid);
-        clearBuf();
         *op = -1;
     }else if(*op == 2){
         printf("Horário de partida: ");

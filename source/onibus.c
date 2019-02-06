@@ -14,21 +14,20 @@ void consultarAssentos(){
 		printf("Data: ");
 		lerData(&on.data);
 		iniciarAssentos(&on);
-		fflush(stdin);
 		if(mostrarAssentos(on)){
 			printf("assento para reservar (0 para cancelar): ");
 			scanf("%2d", &ass);
+			clearBuf();
 			if(ass >= 1 && ass <= 20){
-					res = reservarAssento(on, ass);
-					if(res == 1){
-						printf("Reserva realizada com sucesso!");
-					}else if(res == -1){
-						printf("Erro efetuar reserva!\n");
-					}else if(res == 0){
-						printf("Assento ocupado!\n");
-					}
-					clearBuf();
-					getchar();
+				res = reservarAssento(on, ass);
+				if(res == 1){
+					printf("Reserva realizada com sucesso!");
+				}else if(res == -1){
+					printf("Erro efetuar reserva!\n");
+				}else if(res == 0){
+					printf("Assento ocupado!\n");
+				}
+				getchar();
 			}else if(ass != 0){
 				printf("Assento Invalido!");
 				getchar();
@@ -149,11 +148,9 @@ void lerReserva(){
 	Data d;
 	int ass,res;
 
-	clearBuf();
 	printf("Arquivo: ");
 	fgets(arq, sizeof(arq), stdin);
 	rmvLn(arq);
-	clearBuf();
 
 	FILE *fo = fopen(arq, "r");
 	flog = fopen("relatorios/log.txt", "w");

@@ -16,16 +16,25 @@ typedef struct {
     int ativo;
 } Linha;
 
-
 void cadastrarLinha();
+
 void alterarLinha();
+
 void removerLinha();
+
 void mostrarLinha();
+
 void mostrarLinhaS();
+
 void consultarHorarios();
+
 int pesquisarLinha(Linha *lin);
+
 int getCodLin();
+
 void listarLinhas();
+
 void alterarLin(Linha *lin, int *op);
+
 int pesquisaLin(Linha *lin);
 #endif

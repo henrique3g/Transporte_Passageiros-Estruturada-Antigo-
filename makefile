@@ -30,7 +30,7 @@ all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Construindo binários usando o linker GCC: $@'
-	$(CC) $^ -o $@
+	$(CC) $^ res.o -o $@
 	@ echo 'Termidado construção de binario: $@'
 	@ echo ' '
 

@@ -75,7 +75,6 @@ void relArrecArq(){
 }
 
 void relOcupTela(){
-	clearBuf();
 	int tot[7];
 	int soma=0;
 	for(int i = 0; i < 7; i++) tot[i] = 0;
@@ -116,15 +115,12 @@ void relOcupTela(){
 			soma = 0;
 		}
 	}
-	clearBuf();
-	getchar();
-
 	fclose(fo);
 	fclose(flin);
+	getchar();
 }
 
 void relOcupArq(){
-	clearBuf();
 	int tot[7];
 	int soma=0;
 	for(int i = 0; i < 7; i++) tot[i] = 0;
