@@ -5,6 +5,7 @@
 #include <string.h>
 #include "linha.h"
 #include "func.h"
+#include "relatorio.h"
 
 #define bdoni "bd/onibus.bin"
 typedef struct {
@@ -14,14 +15,14 @@ typedef struct {
 	int ass[20];
 }Onibus;
 
-FILE *fo;
 
 void consultarAssentos();
 int mostrarAssentos(Onibus o);
-void iniciarAssetos(Onibus *o);
 int verificaAssento(Onibus o, int a);
-void reservarAssento(Onibus o, int ass);
+void iniciarAssentos(Onibus *o);
+int reservarAssento(Onibus o, int ass);
 int getCodOni();
 int getTotReserva(Onibus o);
-
+void lerReserva();
+int pesquisaDataOnibus(Onibus *o);
 #endif

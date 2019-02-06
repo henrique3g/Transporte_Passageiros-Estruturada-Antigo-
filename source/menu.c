@@ -55,7 +55,7 @@ void opcao(int op){
             break;
         case 8:
             cabecalho(8);
-            
+            lerReserva();
             break;
         case 0:
             printf("Saindo...");

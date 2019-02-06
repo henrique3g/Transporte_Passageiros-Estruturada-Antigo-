@@ -9,9 +9,9 @@ void relArrecTela(){
 	FILE *flin = fopen(bdlin, "rb");
 	Data d = getData();
 	cabecalho(9);
-	printf("+-----------------------------+-------+-------+\n");
-	printf("|%-29s|%7s|%s|\n","Cidade", "Horário", "Tot/Mês");
-	printf("+-----------------------------+-------+-------+\n");
+	printf("+-----------------------------+-------+---------+\n");
+	printf("|%-29s|%7s|%s|\n","Cidade", "Horário", "Total/Mês");
+	printf("+-----------------------------+-------+---------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
 		while(fread(&o, sizeof(o), 1, fo)){
 			if(o.idLin == lin.id){
@@ -23,11 +23,11 @@ void relArrecTela(){
 		}
 		rewind(fo);
 		if(f == 1){
-			printf("|%-29s| %02d:%02d | %6.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
+			printf("|%-29s| %02d:%02d | %8.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
 			f = 0;
 		}
 	}
-	printf("+-----------------------------+-------+-------+\n");
+	printf("+-----------------------------+-------+---------+\n");
 	getchar();
 
 
@@ -42,7 +42,7 @@ void relArrecArq(){
 	Onibus o;
 	Linha lin;
 	Data d = getData();
-	sprintf(arq, "relatorios/relatorio vendas desse mes %02d-%02d-%04d.txt", d.dia, d.mes, d.ano);
+	sprintf(arq, "relatorios/relatorio de vendas do mes %d emitido %02d-%02d-%04d.txt", d.mes,d.dia , d.mes, d.ano);
 	FILE *fo = fopen(bdoni, "rb");
 	FILE *flin = fopen(bdlin, "rb");
 	FILE *frel = fopen(arq, "w");
@@ -70,9 +70,8 @@ void relArrecArq(){
 	fclose(fo);
 	fclose(frel);
 	fclose(flin);
-	sprintf(arq, "\"relatorios\\relatorio vendas desse mes %02d-%02d-%04d.txt\"", d.dia, d.mes, d.ano);
+	sprintf(arq, "\"relatorios\\relatorio de vendas do mes %d emitido %02d-%02d-%04d.txt\"", d.mes,d.dia, d.mes, d.ano);
 	system(arq);
-	getchar();
 }
 
 void relOcupTela(){
@@ -135,7 +134,7 @@ void relOcupArq(){
 	Linha lin;
 	char arq[100];
 	Data d = getData();
-	sprintf(arq, "relatorios/relatorio ocupacao por dia da semana desse mes %02d-%02d-%04d.txt", d.dia, d.mes, d.ano);
+	sprintf(arq, "relatorios/relatorio de ocupacao do mes %d emitido %02d-%02d-%04d.txt", d.mes,d.dia, d.mes, d.ano);
 	FILE *fo = fopen(bdoni, "rb");
 	FILE *flin = fopen(bdlin, "rb");
 	FILE *frel = fopen(arq, "w");
@@ -173,7 +172,17 @@ void relOcupArq(){
 	fclose(fo);
 	fclose(frel);
 	fclose(flin);
-	sprintf(arq, "\"relatorios\\relatorio ocupacao por dia da semana desse mes %02d-%02d-%04d.txt\"", d.dia, d.mes, d.ano);
+	sprintf(arq, "\"relatorios\\relatorio de ocupacao do mes %d emitido %02d-%02d-%04d.txt\"", d.mes, d.dia, d.mes, d.ano);
 	system(arq);
-	getchar();
+}
+
+void logErro(int i, char *s){
+	
+	char erro[][20] = {{"Assento ocupado"},
+					   {"Onibus já partiu"},
+					   {"Linha não existe!"}};
+
+	fprintf(flog, "em \"%s\": %s\n", s, erro[i]);
+
+	fclose(flog);
 }

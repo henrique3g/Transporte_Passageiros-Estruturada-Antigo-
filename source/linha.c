@@ -4,7 +4,7 @@
 void cadastrarLinha(){
     Linha lin;
     int op;
-    flin = fopen(bdlin, "a+b");
+    FILE *flin = fopen(bdlin, "ab");
     lin.id = getCodLin();
     printf("Codigo: %d\n", lin.id);
     clearBuf();
@@ -82,10 +82,10 @@ void mostrarLinhaS(Linha lin){
 }
 
 int getCodLin(){
+    FILE *flin = fopen(bdlin, "rb");
     Linha lin;
     int id = 0;
-    rewind(flin);
-
+    
     while(fread(&lin, sizeof(lin), 1, flin)){ 
         id++;
     }
@@ -102,7 +102,7 @@ void consultarHorarios(){
     rmvLn(cid);
     toUpperCase(cid);
 
-    flin = fopen(bdlin, "rb");
+    FILE *flin = fopen(bdlin, "rb");
     if(flin == NULL){
         printf("Erro! Não existe linhas cadastradas!\n");
     }else{
@@ -136,7 +136,7 @@ int pesquisarLinha(Linha *lin){
     }
     clearBuf();
 
-    flin = fopen(bdlin, "rb");
+    FILE *flin = fopen(bdlin, "rb");
 
     while(fread(lin, sizeof(Linha), 1, flin)){
        
@@ -164,7 +164,7 @@ void removerLinha(){
     int op;
     Linha lin;
     int pos = pesquisarLinha(&lin)*sizeof(Linha);
-    flin = fopen(bdlin, "r+b");
+    FILE *flin = fopen(bdlin, "r+b");
     if(flin == NULL){
         printf("Erro ao abrir bd!\n");
         getchar();
@@ -193,7 +193,7 @@ void alterarLinha(){
     int op;
     Linha lin;
     int pos = pesquisarLinha(&lin)*sizeof(Linha);
-    flin = fopen(bdlin, "r+b");
+    FILE *flin = fopen(bdlin, "r+b");
     if(flin == NULL){
         printf("Erro ao abrir bd!\n");
         getchar();
@@ -229,7 +229,7 @@ void alterarLinha(){
 }
 
 void listarLinhas(){
-    flin = fopen(bdlin, "rb");
+    FILE *flin = fopen(bdlin, "rb");
     Linha lin;
     int count=0;
     while(fread(&lin, sizeof(lin), 1, flin)){
@@ -266,4 +266,25 @@ void alterarLin(Linha *lin, int *op){
         clearBuf();
         *op = -1;
     } 
+}
+
+int pesquisaLin(Linha *lin){
+    FILE *flin = fopen(bdlin, "rb");
+    Hora hora = lin->hora;
+    char cid[30];
+    int pos = 0;
+    strcpy(cid, lin->cid);
+    
+    while(fread(lin, sizeof(Linha), 1, flin)){
+        if(!strcmp(cid, lin->cid)){
+            if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
+                fclose(flin);
+                return pos;
+            }
+        }
+        pos++;
+    }
+    pos = -1;
+    fclose(flin);
+    return pos;
 }

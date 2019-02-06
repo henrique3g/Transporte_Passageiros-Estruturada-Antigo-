@@ -53,6 +53,6 @@ clean:
 # @ $(RM) ./objects/*.o $(PROJ_NAME) *~
 # @ rmdir objects
 # Windows
-	@ rd objects /s /q
+	@ del objects\\*.o
 	@ del Sistema.exe
 .PHONY: all clean

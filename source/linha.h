@@ -8,8 +8,6 @@
 
 #define bdlin "bd/linhas.bin"
 
-FILE *flin;
-
 typedef struct {
     int id;
     char cid[30];
@@ -29,5 +27,5 @@ int pesquisarLinha(Linha *lin);
 int getCodLin();
 void listarLinhas();
 void alterarLin(Linha *lin, int *op);
-
+int pesquisaLin(Linha *lin);
 #endif

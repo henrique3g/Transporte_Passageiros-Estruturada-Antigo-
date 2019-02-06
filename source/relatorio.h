@@ -6,12 +6,12 @@
 #include <string.h>
 #include "onibus.h"
 #include "func.h"
-
+FILE *flog;
 
 void relArrecTela();
 void relArrecArq();
 void relOcupTela();
 void relOcupArq();
-
+void logErro(int i, char *s);
 
 #endif
