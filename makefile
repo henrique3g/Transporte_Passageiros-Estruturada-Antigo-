@@ -13,6 +13,16 @@ OBJ=$(subst .c,.o,$(subst source,objects,$(C_SOURCE)))
 # Compilador e linker
 CC=gcc
  
+ifdef OS
+	RM = del objects\\*.o Sistema.exe
+	ICO=ico.o -o
+  else
+  	ifeq ($(shell uname), Linux)
+      RM = rm -f ./objects/*.o $(PROJ_NAME) *~
+	  ICO=-o
+   	endif
+endif
+
 # Flags para compilador
 CC_FLAGS=-c         \
          -W         \
@@ -21,7 +31,7 @@ CC_FLAGS=-c         \
          -pedantic
  
 # Comando usado no alvo limpo
-RM = rm -rf
+
  
 #
 # Compilação e vinculação
@@ -30,7 +40,7 @@ all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Construindo binários usando o linker GCC: $@'
-	$(CC) $^ -o $@
+	$(CC) $^ $(ICO) $@
 	@ echo 'Termidado construção de binario: $@'
 	@ echo ' '
 
@@ -49,10 +59,6 @@ objFolder:
 
 
 clean:
-# Linux
-#	@ $(RM) ./objects/*.o $(PROJ_NAME) *~
-# @ rmdir objects
-# Windows
-	@ del objects\\*.o
-	@ del Sistema.exe
+	@ $(RM)
+	
 .PHONY: all clean
