@@ -1,7 +1,7 @@
 #include "relatorio.h"
 
 void relArrecTela(){
-	float valor = 0;
+	float valor = 0, total = 0;
 	int f = 0;
 	Onibus o;
 	Linha lin;
@@ -13,16 +13,16 @@ void relArrecTela(){
 	printf("//                                             //\n");
 	printf("//        Relatório Arrecadação Mensal         //\n");
 	printf("//                                             //\n");
-	printf("//        Emissão: %02d/%02d/%04d                  //\n", d.dia, d.mes, d.ano);
+	printf("//                 Emissão: %02d/%02d/%04d         //\n", d.dia, d.mes, d.ano);
 	printf("/////////////////////////////////////////////////\n");
-	printf("+-----------------------------+-------+---------+\n");
+	printf("+-----------------------------------------------+\n");
 	printf("|%-29s|%7s|%s|\n","Cidade", "Horário", "Total/Mês");
 	printf("+-----------------------------+-------+---------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
 		while(fread(&o, sizeof(o), 1, fo)){
 			if(o.idLin == lin.id){
 				if(o.data.mes == d.mes && o.data.ano == d.ano){
-					valor = lin.vlr * getTotReserva(o);
+					valor += lin.vlr * getTotReserva(o);
 					f = 1;
 				}
 			}
@@ -32,8 +32,12 @@ void relArrecTela(){
 			printf("|%-29s| %02d:%02d | %8.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
 			f = 0;
 		}
+		total += valor;
+		valor = 0;
 	}
-	printf("+-----------------------------+-------+---------+\n");
+	printf("+-----------------------------------------------+\n");
+	printf("|Total                                %10.2f|\n", total);
+	printf("+-----------------------------------------------+\n");
 	getchar();
 
 
@@ -42,7 +46,7 @@ void relArrecTela(){
 }
 
 void relArrecArq(){
-	float valor = 0;
+	float valor = 0, total = 0;
 	int f = 0;
 	char arq[100];
 	Onibus o;
@@ -56,7 +60,7 @@ void relArrecArq(){
 	fprintf(frel, "//                                             //\n");
 	fprintf(frel, "//        Relatório Arrecadação Mensal         //\n");
 	fprintf(frel, "//                                             //\n");
-	fprintf(frel, "//        Emissão: %02d/%02d/%04d                  //\n", d.dia, d.mes, d.ano);
+	fprintf(frel, "//                 Emissão: %02d/%02d/%04d         //\n", d.dia, d.mes, d.ano);
 	fprintf(frel, "/////////////////////////////////////////////////\n");
 	fprintf(frel, "+-----------------------------+-------+---------+\n");
 	fprintf(frel, "|%-29s|%7s|%s|\n","Cidade", "Horário", "Total/Mês");
@@ -65,7 +69,7 @@ void relArrecArq(){
 		while(fread(&o, sizeof(o), 1, fo)){
 			if(o.idLin == lin.id){
 				if(o.data.mes == d.mes && o.data.ano == d.ano){
-					valor = lin.vlr * getTotReserva(o);
+					valor += lin.vlr * getTotReserva(o);
 					f = 1;
 				}
 			}
@@ -75,15 +79,21 @@ void relArrecArq(){
 			fprintf(frel, "|%-29s| %02d:%02d | %8.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
 			f = 0;
 		}
+		total += valor;
+		valor = 0;
 	}
-	fprintf(frel,"+-----------------------------+-------+---------+\n");
+	fprintf(frel,"+-----------------------------------------------+\n");
+	fprintf(frel,"|Total                                %10.2f|\n", total);
+	fprintf(frel,"+-----------------------------------------------+\n");
 
 
 	fclose(fo);
 	fclose(frel);
 	fclose(flin);
 	sprintf(arq, "\"relatorios\\relatorio de vendas do mes %d emitido %02d-%02d-%04d.txt\"", d.mes,d.dia, d.mes, d.ano);
+	printf("Feche o arquivo aberto para continuar!\n");
 	system(arq);
+
 }
 
 void relOcupTela(){
@@ -102,7 +112,7 @@ void relOcupTela(){
 	printf("//                                                 //\n");
 	printf("//     Relatório de ocupacao por dia da semana     //\n");
 	printf("//                                                 //\n");
-	printf("//     Emissão: %02d/%02d/%04d                         //\n", d.dia, d.mes, d.ano);
+	printf("//                          Emissão: %02d/%02d/%04d    //\n", d.dia, d.mes, d.ano);
 	printf("/////////////////////////////////////////////////////\n");
 	printf("+---------------------------------------------------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
@@ -151,7 +161,7 @@ void relOcupArq(){
 	fprintf(frel, "//                                                 //\n");
 	fprintf(frel, "//     Relatório de ocupacao por dia da semana     //\n");
 	fprintf(frel, "//                                                 //\n");
-	fprintf(frel, "//     Emissão: %02d/%02d/%04d                         //\n", d.dia, d.mes, d.ano);
+	fprintf(frel, "//                         Emissão: %02d/%02d/%04d     //\n", d.dia, d.mes, d.ano);
 	fprintf(frel, "/////////////////////////////////////////////////////\n");
 	fprintf(frel, "+---------------------------------------------------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
@@ -168,7 +178,7 @@ void relOcupArq(){
 		if(f == 1){
 			sprintf(str, "|%s, %02d:%02d , Total no mês = %02d", lin.cid, lin.hora.h, lin.hora.m, soma);
 			fprintf(frel, "%-53s|\n",str);
-			fprintf(frel, "|Dom\tSeg\t\tTer\t\tQua\t\tQui\t\tSex\t\tSab |\n|");
+			fprintf(frel, "|Dom%sSeg%sTer%sQua%sQui%sSex%sSab |\n|",es,es,es,es,es,es);
 			for(int i = 0; i < 7; i++)
 				fprintf(frel, "%d/80%c",tot[i], i == 6?'|':'\t');
 			fprintf(frel, "\n+---------------------------------------------------+\n");
@@ -182,6 +192,7 @@ void relOcupArq(){
 	fclose(frel);
 	fclose(flin);
 	sprintf(arq, "\"relatorios\\relatorio de ocupacao do mes %d emitido %02d-%02d-%04d.txt\"", d.mes, d.dia, d.mes, d.ano);
+	printf("Feche o arquivo aberto para continuar!\n");
 	system(arq);
 }
 
