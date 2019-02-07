@@ -1,2 +1,2 @@
-# AgenciaTurismo-Estrurada
+# Transporte_Passageiros-Estrurada
 Projeto da Disciplina Prog. Estruturada, Sistema para uma empresa de transporte rodoviário de passageiros.
