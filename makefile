@@ -30,7 +30,7 @@ all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Construindo binários usando o linker GCC: $@'
-	$(CC) $^ res.o -o $@
+	$(CC) $^ -o $@
 	@ echo 'Termidado construção de binario: $@'
 	@ echo ' '
 
@@ -50,7 +50,7 @@ objFolder:
 
 clean:
 # Linux
-# @ $(RM) ./objects/*.o $(PROJ_NAME) *~
+#	@ $(RM) ./objects/*.o $(PROJ_NAME) *~
 # @ rmdir objects
 # Windows
 	@ del objects\\*.o

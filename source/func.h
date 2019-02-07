@@ -31,6 +31,8 @@ int isNum(char *s);
 
 int isCharNum(char c);
 
+int isChar(char c);
+
 void lerData(Data *d);
 
 int isPar(int n);
@@ -44,5 +46,9 @@ Hora getHora();
 int getDiaSemana();
 
 int getDiaSemanaE(Data d);
+
+int validaData(Data d);
+
+int validaHora(Hora h);
 
 #endif

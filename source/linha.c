@@ -6,7 +6,7 @@ void cadastrarLinha(){
     int op;
     FILE *flin = fopen(bdlin, "ab");
     lin.id = getCodLin();
-    printf("Codigo: %d\n", lin.id);
+    printf("\nCodigo: %d\n", lin.id);
     printf("Cidade: ");
     fgets(lin.cid, sizeof(lin.cid), stdin);
     toUpperCase(lin.cid);
@@ -15,55 +15,55 @@ void cadastrarLinha(){
     printf("Horário de partida: ");
     scanf("%2d:%2d", &lin.hora.h, &lin.hora.m);
     clearBuf();
-    printf("Valor da passagem: ");
-    scanf("%6f", &lin.vlr);
-    clearBuf();
-    lin.ativo = 1;
-    
-    while(1){
-        cls();
-        printf("//////////////////////////////\n");
-        printf("//     Cadastrar Linha      //\n");
-        printf("//////////////////////////////\n");
-        mostrarLinha(lin);
-        printf("1 - Salvar  2 - Alterar  0 - Voltar\nOpção: ");
-        scanf("%1d", &op);
+    if(validaHora(lin.hora)){
+
+        printf("Valor da passagem: ");
+        scanf("%6f", &lin.vlr);
         clearBuf();
-        if(op == 1){
-            if(fwrite(&lin, sizeof(lin), 1, flin)){
-                printf("Linha cadastrada com sucesso!\n");
-                getchar();
-                fclose(flin);
+        lin.ativo = 1;
+        
+        while(1){
+            cabecalho(1);
+            mostrarLinha(lin);
+            printf("\n1 - Salvar  2 - Alterar  0 - Voltar\nOpção: ");
+            scanf("%1d", &op);
+            clearBuf();
+            if(op == 1){
+                if(fwrite(&lin, sizeof(lin), 1, flin)){
+                    printf("Linha cadastrada com sucesso!\n");
+                    getchar();
+                    fclose(flin);
+                    break;
+                } else {
+                    printf("Erro ao cadastrar linha!");
+                    printf("\nPressione enter para continuar!\n");
+                    getchar();
+                }
+            } else if(op == 2){
+                while(1){
+                    cabecalho(3);
+                    mostrarLinha(lin);
+                    printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  0 - voltar\nOpção: ");
+                    scanf("%1d", &op);
+                    clearBuf();
+                    alterarLin(&lin, &op);
+                    if(op == 0) break;
+                }
+            } else if(op == 0){            
                 break;
-            } else {
-                printf("Erro ao cadastrar linha!");
-                printf("\nPressione enter para continuar!\n");
-                getchar();
             }
-        } else if(op == 2){
-            while(1){
-                cls();
-                printf("//////////////////////////////\n");
-                printf("//          Alterar         //\n");
-                printf("//////////////////////////////\n");
-                mostrarLinha(lin);
-                printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  0 - voltar\nOpção: ");
-                scanf("%1d", &op);
-                clearBuf();
-                alterarLin(&lin, &op);
-                if(op == 0) break;
-            }
-        } else if(op == 0){            
-            break;
+
+
         }
-
-
+    }else{
+        printf("Erro! Hora invalida!\n");
+        getchar();
     }
 }
 
 void mostrarLinha(Linha lin){
 	char h[6];
-    printf("Codigo: %d",lin.id);
+    printf("\nCodigo: %d",lin.id);
     //printf("\nSituação: %s",lin.ativo == 1?"ATIVO":"INATIVO");
     printf("\nCidade: %s", lin.cid);
 	sprintf(h, "%02d:%02d",lin.hora.h, lin.hora.m);
@@ -121,7 +121,7 @@ int pesquisarLinha(Linha *lin){
     int cod = -1;
     char cid[30];
     Hora hora;
-    printf("Cidade(Nome ou Código): ");
+    printf("\nCidade ou Código: ");
     fgets(cid, sizeof(cid), stdin);
     rmvLn(cid);
     if(isNum(cid)){
@@ -132,29 +132,33 @@ int pesquisarLinha(Linha *lin){
         scanf("%2d:%2d", &hora.h, &hora.m);
         clearBuf();
     }
+    if(validaHora(hora) || cod != -1){
 
-    FILE *flin = fopen(bdlin, "rb");
+        FILE *flin = fopen(bdlin, "rb");
 
-    while(fread(lin, sizeof(Linha), 1, flin)){
-       
-        if(cod != -1){
-            if((cod == lin->id) && lin->ativo == 1){
-                fclose(flin);
-                return pos;
-            }
-        }else{
-            if(!strcmp(cid, lin->cid)){
-                if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
+        while(fread(lin, sizeof(Linha), 1, flin)){
+        
+            if(cod != -1){
+                if((cod == lin->id) && lin->ativo == 1){
                     fclose(flin);
                     return pos;
                 }
+            }else{
+                if(!strcmp(cid, lin->cid)){
+                    if((hora.h == lin->hora.h && hora.m == lin->hora.m) && lin->ativo == 1){
+                        fclose(flin);
+                        return pos;
+                    }
+                }
             }
+            pos++;
         }
-        pos++;
+        fclose(flin);
+    }else{
+        printf("Erro! Hora invalida!\n");
+        getchar();
+        return -1;
     }
-    pos = -1;
-    fclose(flin);
-    return pos;
 }
 
 void removerLinha(){
@@ -166,6 +170,7 @@ void removerLinha(){
         printf("Erro ao abrir bd!\n");
         getchar();
     }else if(pos != -1){
+        cabecalho(2);
         mostrarLinha(lin);
         printf("\n1 - Excluir  0 - Voltar\nOpção: ");
         scanf("%1d", &op);
@@ -196,10 +201,7 @@ void alterarLinha(){
         getchar();
     }else if(pos != -1){
         do{
-			cls();
-            printf("//////////////////////////////\n");
-            printf("//      Alterar Linha       //\n");
-            printf("//////////////////////////////\n");
+			cabecalho(3);
 			mostrarLinha(lin);
 			printf("\n1 - Cidade  2 - Horário de partida  3 - Valor  (4 - Salvar  0 - Cancelar)\nOpção: ");
 			scanf("%1d", &op);
@@ -231,7 +233,7 @@ void listarLinhas(){
     int count=0;
     while(fread(&lin, sizeof(lin), 1, flin)){
         if(lin.ativo == 1){
-            printf("\n");
+            // printf("\n");
             mostrarLinha(lin);
             count = 1;
         }
@@ -254,7 +256,13 @@ void alterarLin(Linha *lin, int *op){
         printf("Horário de partida: ");
         scanf("%2d:%2d", &lin->hora.h, &lin->hora.m);
         clearBuf();
-        *op = -1;
+        if(validaHora(lin->hora)){
+            *op = -1;
+        }else{
+            printf("Erro! Hora invalida!\n");
+            getchar();
+            *op = 0;
+        }
     }else if(*op == 3){
         printf("Valor da passagem: ");
     	scanf("%6f", &lin->vlr);

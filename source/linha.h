@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "func.h"
+#include "menu.h"
 
 #define bdlin "bd/linhas.bin"
 

@@ -6,34 +6,36 @@ void consultarAssentos(){
 	int ass,res;
 	if(pesquisarLinha(&lin) != -1){
 		on.idLin = lin.id; 
-		cls();
-		printf("//////////////////////////////\n");
-		printf("//    Consultar Assentos    //\n");
-		printf("//////////////////////////////\n");
+		cabecalho(6);
 		mostrarLinhaS(lin);
 		printf("Data: ");
 		lerData(&on.data);
-		iniciarAssentos(&on);
-		if(mostrarAssentos(on)){
-			printf("assento para reservar (0 para cancelar): ");
-			scanf("%2d", &ass);
-			clearBuf();
-			if(ass >= 1 && ass <= 20){
-				res = reservarAssento(on, ass);
-				if(res == 1){
-					printf("Reserva realizada com sucesso!");
-				}else if(res == -1){
-					printf("Erro efetuar reserva!\n");
-				}else if(res == 0){
-					printf("Assento ocupado!\n");
+		if(validaData(on.data)){
+			iniciarAssentos(&on);
+			if(mostrarAssentos(on)){
+				printf("assento para reservar (0 para cancelar): ");
+				scanf("%2d", &ass);
+				clearBuf();
+				if(ass >= 1 && ass <= 20){
+					res = reservarAssento(on, ass);
+					if(res == 1){
+						printf("Reserva realizada com sucesso!");
+					}else if(res == -1){
+						printf("Erro efetuar reserva!\n");
+					}else if(res == 0){
+						printf("Assento ocupado!\n");
+					}
+					getchar();
+				}else if(ass != 0){
+					printf("Assento Invalido!");
+					getchar();
 				}
-				getchar();
-			}else if(ass != 0){
-				printf("Assento Invalido!");
+			}else{
+				printf("Todos os assentos estão ocupados!\n");
 				getchar();
 			}
 		}else{
-			printf("Todos os assentos estão ocupados!\n");
+			printf("Erro! Data invalida!\n");
 			getchar();
 		}
 	}else {
@@ -145,8 +147,8 @@ void lerReserva(){
 	char arq[100], str[60];
 	Linha lin;
 	Onibus o;
-	Data d;
-	int ass,res;
+	char c;
+	int ass, res, count = -1;
 
 	printf("Arquivo: ");
 	fgets(arq, sizeof(arq), stdin);
@@ -156,38 +158,56 @@ void lerReserva(){
 	flog = fopen("relatorios/log.txt", "w");
 	if(fo == NULL)	printf("Erro ao abrir arquivo!\n");
 
-
 	while(!feof(fo)){
-		fscanf(fo, "%s, ", lin.cid);
-		lin.cid[strlen(lin.cid)-1] = '\0';
-		fscanf(fo, "%2d:%2d,", &lin.hora.h,&lin.hora.m);
-		fscanf(fo, "%2d/%2d/%4d,", &o.data.dia,&o.data.mes, &o.data.ano);
-		fscanf(fo, "%2d", &ass);
-		sprintf(str, "%s, %02d:%02d, %02d/%02d/%04d, %02d", lin.cid, lin.hora.h, lin.hora.m, o.data.dia, o.data.mes, o.data.ano, ass);
-		// formatarReserva(str, &lin, &o,&ass);
-		if(ass >= 1 && ass <= 20){
-			if(pesquisaLin(&lin) != -1){
-				o.idLin = lin.id;
-				iniciarAssentos(&o);
-					res = reservarAssento(o, ass);
-					if(res == 1){
-						
-					}else if(res == -1){
-						//printf("Erro efetuar reserva!\n");
-					}else if(res == 0){
-						logErro(0, str);
-					}		
-			}else{
-				logErro(2, str);
-				//gravar no log - linha inexistente
+		count = 0;
+		do{
+			c = getc(fo);
+			if(isChar(c) || c == ' '){
+				lin.cid[count] = c;
+				count++;
 			}
+		}while (c != ',' && c != EOF);
+		lin.cid[count] = '\0';
+		toUpperCase(lin.cid);
 
+		fscanf(fo, " %02d:%02d, %02d/%02d/%4d, %02d", &lin.hora.h,&lin.hora.m, &o.data.dia,&o.data.mes, &o.data.ano, &ass);
+			// fscanf(fo, "%2d/%2d/%4d,", &o.data.dia,&o.data.mes, &o.data.ano);
+			// fscanf(fo, "%2d", &ass);
+		sprintf(str, "%s, %02d:%02d, %02d/%02d/%04d, %02d", lin.cid, lin.hora.h, lin.hora.m, o.data.dia, o.data.mes, o.data.ano, ass);
+		if(!feof(fo)){
+			if(validaHora(lin.hora)){
+				if(validaData(o.data)){
+					if(ass >= 1 && ass <= 20){
+						if(pesquisaLin(&lin) != -1){
+							o.idLin = lin.id;
+							iniciarAssentos(&o);
+								res = reservarAssento(o, ass);
+								if(res == 1){
+									logErro(6, str);
+								}else if(res == -1){
+									//printf("Erro efetuar reserva!\n");
+								}else if(res == 0){
+									logErro(0, str);
+								}		
+						}else{
+							logErro(2, str);
+							//gravar no log - linha inexistente
+						}
+					}else{
+						logErro(5, str);
+					}
+				}else{
+					logErro(4, str);
+				}
+			}else{
+				logErro(3, str);
+			}
 		}
-		
 	}
+	fclose(flog);
+	fclose(fo);
 	printf("Arquivo processado com sucesso!\nRelatório gravado em log.txt.");
 	getchar();
-	fclose(fo);
 }
 
 int pesquisaDataOnibus(Onibus *o){

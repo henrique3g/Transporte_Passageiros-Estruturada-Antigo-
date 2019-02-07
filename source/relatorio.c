@@ -8,7 +8,13 @@ void relArrecTela(){
 	FILE *fo = fopen(bdoni, "rb");
 	FILE *flin = fopen(bdlin, "rb");
 	Data d = getData();
-	cabecalho(9);
+	cls();
+	printf("/////////////////////////////////////////////////\n");
+	printf("//                                             //\n");
+	printf("//        Relatório Arrecadação Mensal         //\n");
+	printf("//                                             //\n");
+	printf("//        Emissão: %02d/%02d/%04d                  //\n", d.dia, d.mes, d.ano);
+	printf("/////////////////////////////////////////////////\n");
 	printf("+-----------------------------+-------+---------+\n");
 	printf("|%-29s|%7s|%s|\n","Cidade", "Horário", "Total/Mês");
 	printf("+-----------------------------+-------+---------+\n");
@@ -46,9 +52,15 @@ void relArrecArq(){
 	FILE *fo = fopen(bdoni, "rb");
 	FILE *flin = fopen(bdlin, "rb");
 	FILE *frel = fopen(arq, "w");
-	fprintf(frel, "+-----------------------------+-------+-------+\n");
-	fprintf(frel, "|%-29s|%7s|%s|\n","Cidade", "Horário", "Tot/Mês");
-	fprintf(frel, "+-----------------------------+-------+-------+\n");
+	fprintf(frel, "/////////////////////////////////////////////////\n");
+	fprintf(frel, "//                                             //\n");
+	fprintf(frel, "//        Relatório Arrecadação Mensal         //\n");
+	fprintf(frel, "//                                             //\n");
+	fprintf(frel, "//        Emissão: %02d/%02d/%04d                  //\n", d.dia, d.mes, d.ano);
+	fprintf(frel, "/////////////////////////////////////////////////\n");
+	fprintf(frel, "+-----------------------------+-------+---------+\n");
+	fprintf(frel, "|%-29s|%7s|%s|\n","Cidade", "Horário", "Total/Mês");
+	fprintf(frel, "+-----------------------------+-------+---------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
 		while(fread(&o, sizeof(o), 1, fo)){
 			if(o.idLin == lin.id){
@@ -60,11 +72,11 @@ void relArrecArq(){
 		}
 		rewind(fo);
 		if(f == 1){
-			fprintf(frel, "|%-29s| %02d:%02d | %6.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
+			fprintf(frel, "|%-29s| %02d:%02d | %8.2f|\n", lin.cid, lin.hora.h, lin.hora.m, valor);
 			f = 0;
 		}
 	}
-	fprintf(frel,"+-----------------------------+-------+-------+\n");
+	fprintf(frel,"+-----------------------------+-------+---------+\n");
 
 
 	fclose(fo);
@@ -90,6 +102,7 @@ void relOcupTela(){
 	printf("//                                                 //\n");
 	printf("//     Relatório de ocupacao por dia da semana     //\n");
 	printf("//                                                 //\n");
+	printf("//     Emissão: %02d/%02d/%04d                         //\n", d.dia, d.mes, d.ano);
 	printf("/////////////////////////////////////////////////////\n");
 	printf("+---------------------------------------------------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
@@ -105,7 +118,7 @@ void relOcupTela(){
 		rewind(fo);
 		if(f == 1){
 			sprintf(str, "|%s, %02d:%02d , Total no mês = %02d", lin.cid, lin.hora.h, lin.hora.m, soma);
-			printf("%-52s|\n",str);
+			printf("%-53s|\n",str);
 			printf("|Dom\tSeg\tTer\tQua\tQui\tSex\tSab |\n|");
 			for(int i = 0; i < 7; i++)
 				printf("%d/80%c",tot[i], i == 6?'|':'\t');
@@ -134,11 +147,11 @@ void relOcupArq(){
 	FILE *fo = fopen(bdoni, "rb");
 	FILE *flin = fopen(bdlin, "rb");
 	FILE *frel = fopen(arq, "w");
-	cls();
 	fprintf(frel, "/////////////////////////////////////////////////////\n");
 	fprintf(frel, "//                                                 //\n");
 	fprintf(frel, "//     Relatório de ocupacao por dia da semana     //\n");
 	fprintf(frel, "//                                                 //\n");
+	fprintf(frel, "//     Emissão: %02d/%02d/%04d                         //\n", d.dia, d.mes, d.ano);
 	fprintf(frel, "/////////////////////////////////////////////////////\n");
 	fprintf(frel, "+---------------------------------------------------+\n");
 	while(fread(&lin, sizeof(lin), 1, flin)){
@@ -155,7 +168,7 @@ void relOcupArq(){
 		if(f == 1){
 			sprintf(str, "|%s, %02d:%02d , Total no mês = %02d", lin.cid, lin.hora.h, lin.hora.m, soma);
 			fprintf(frel, "%-53s|\n",str);
-			fprintf(frel, "|Dom\tSeg\tTer\tQua\tQui\tSex\tSab |\n|");
+			fprintf(frel, "|Dom\tSeg\t\tTer\t\tQua\t\tQui\t\tSex\t\tSab |\n|");
 			for(int i = 0; i < 7; i++)
 				fprintf(frel, "%d/80%c",tot[i], i == 6?'|':'\t');
 			fprintf(frel, "\n+---------------------------------------------------+\n");
@@ -174,11 +187,14 @@ void relOcupArq(){
 
 void logErro(int i, char *s){
 	
-	char erro[][20] = {{"Assento ocupado"},
+	char erro[][30] = {{"Assento ocupado"},
 					   {"Onibus já partiu"},
-					   {"Linha não existe!"}};
+					   {"Linha não existe!"},
+					   {"Horario invalido!"},
+					   {"Data invalida!"},
+					   {"Assento invalido!"},
+					   {"Reserva realizada!"}};
 
 	fprintf(flog, "em \"%s\": %s\n", s, erro[i]);
-
-	fclose(flog);
+	//printf("em \"%s\": %s\n", s, erro[i]);
 }

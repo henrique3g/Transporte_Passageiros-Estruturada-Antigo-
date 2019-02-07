@@ -5,8 +5,8 @@ void menu(){
     int op;
     do{
         op = -1;
-        cabecalho(11);
-        printf("1 - Inserir linha\n");
+        cabecalho(0);
+        printf("\n1 - Inserir linha\n");
         printf("2 - Remover linha\n");
         printf("3 - Alterar linha\n");
         printf("4 - Listar linhas\n");
@@ -71,7 +71,7 @@ void opcao(int op){
 void menuRel(){
 	int op;
 	cabecalho(7);
-    printf("1 - Total arrecadado (tela)\n");
+    printf("\n1 - Total arrecadado (tela)\n");
     printf("2 - Total arrecadado (arquivo)\n");
     printf("3 - Ocupação percentual media (tela)\n");
     printf("4 - Ocupação percentual media (arquivo)\n");
@@ -91,7 +91,9 @@ void menuRel(){
 }
 
 void cabecalho(int i){
-	if(i == 1){
+	if(i == 0){
+		printCabecalho("Menu");
+    }else if(i == 1){
 		printCabecalho("Cadastrar Linha");
 	}else if(i == 2){
 		printCabecalho("Remover Linha");
@@ -100,7 +102,7 @@ void cabecalho(int i){
 	}else if(i == 4){
 		printCabecalho("Listar Linha");
 	}else if(i == 5){
-		printCabecalho("Consular Horários");
+		printCabecalho("Consultar Horários");
 	}else if(i == 6){
 		printCabecalho("Consultar Assentos");
 	}else if(i == 7){
@@ -111,20 +113,15 @@ void cabecalho(int i){
 		printCabecalho("Relatório Arrecadação Mensal");
 	}else if(i == 10){
 		printCabecalho("Relatório Ocupacao percentual media");
-	}else if(i == 11){
-		printCabecalho("Menu");
-	}else if(i == 12){
-		printCabecalho("Relatórios");
-	}
-	
+    }
 }
 
 void printCabecalho(char *s){
 	cls();
 	int t = (int)strlen(s);
-	int sp = (43/2) - (t/2);
-	printf("///////////////////////////////////////////////\n");
-    printf("//                                           //\n//");
+	int sp = (49/2) - (t/2);
+	printf("/////////////////////////////////////////////////////\n");
+    printf("//                                                 //\n//");
 	for(int i = 0; i < sp; i++){
 		printf(" ");
 	}
@@ -133,6 +130,6 @@ void printCabecalho(char *s){
 	for(int i = 0; i < sp; i++){
 		printf(" ");
 	}
-    printf("//\n//                                           //\n");
-    printf("///////////////////////////////////////////////\n");
+    printf("//\n//                                                 //\n");
+    printf("/////////////////////////////////////////////////////\n");
 }

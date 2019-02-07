@@ -30,7 +30,7 @@ void rmvLn(char *s){
 }
 
 void toUpperCase(char *s){
-    for(int i = 0; i < 30; i++){
+    for(int i = 0; i < strlen(s); i++){
         if(!i)  toUpper(s);
         else{
             toLower(&s[i]);
@@ -71,6 +71,13 @@ int isCharNum(char c){
     return 0;
 }
 
+int isChar(char c){
+    toUpper(&c);
+    if(c > 64 && c < 91)
+        return 1;
+    return 0;
+}
+
 void lerData(Data *d){
 	scanf("%2d/%2d/%4d", &d->dia, &d->mes, &d->ano);
     clearBuf();
@@ -79,10 +86,10 @@ void lerData(Data *d){
 Data getData(){
     Data d;
     time_t t;
-    int b[3];
+    int b;
     char s[4];
     time(&t);
-    sscanf(ctime(&t), "%3s %3s %2d %2d:%2d:%2d %4d", s, s, &d.dia, &b[0], &b[1], &b[2], &d.ano);
+    sscanf(ctime(&t), "%3s %3s %2d %2d:%2d:%2d %4d", s, s, &d.dia, &b, &b, &b, &d.ano);
     d.mes = formatMes(s);
     return d;
 }
@@ -174,4 +181,38 @@ int diffDate(Data i, Data f){
         return d;
     }
 
+}
+
+int validaData(Data d){
+    if((d.dia >= 1 && d.dia <= 31) && (d.mes >= 1 && d.mes <= 12) && (d.ano > 2000 && d.ano <= 2100)){
+        if(d.mes == 2){
+            if(!(d.ano % 4)){
+                if(d.dia <= 29)
+                    return 1;
+            }else{
+                if(d.dia <= 28)
+                    return 1;
+            }
+            return 0;    
+        }else if(d.mes <= 7){
+            if(isPar(d.mes) && d.dia <= 30)
+                return 1;
+            else if(!isPar(d.mes) && d.dia <= 31)
+                return 1;
+            return 0;            
+        }else if(d.mes >= 8){
+            if(isPar(d.mes) && d.dia <= 31)
+                return 1;
+            else if(!isPar(d.mes) && d.dia <= 30)
+                return 1;
+            return 0;
+        }
+    }
+    return 0;
+}
+
+int validaHora(Hora h){
+    if((h.h >= 0 && h.h <= 23) && (h.m >= 0 && h.m <= 59))
+        return 1;
+    return 0;
 }
