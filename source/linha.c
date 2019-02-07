@@ -154,11 +154,10 @@ int pesquisarLinha(Linha *lin){
             pos++;
         }
         fclose(flin);
-    }else{
-        printf("Erro! Hora invalida!\n");
-        getchar();
-        return -1;
     }
+    printf("Erro! Hora invalida!\n");
+    getchar();
+    return -1;
 }
 
 void removerLinha(){

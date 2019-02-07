@@ -51,4 +51,8 @@ int validaData(Data d);
 
 int validaHora(Hora h);
 
+int formatMes(char *s);
+
+int diffDate(Data i, Data f);
+
 #endif

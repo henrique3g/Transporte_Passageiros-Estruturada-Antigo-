@@ -30,7 +30,7 @@ void rmvLn(char *s){
 }
 
 void toUpperCase(char *s){
-    for(int i = 0; i < strlen(s); i++){
+    for(unsigned int i = 0; i < strlen(s); i++){
         if(!i)  toUpper(s);
         else{
             toLower(&s[i]);
@@ -119,7 +119,9 @@ int formatMes(char *s){
         return 11;
     else if(!strcmp(s, "Dec"))
         return 12;
+    return 0;
 }
+
 Hora getHora(){
     Hora h;
     time_t t;
@@ -150,7 +152,7 @@ int getDiaSemana(){
         return 6;
     }else if(!strcmp(d, "Sat")){
         return 7;
-    }
+    }else   return 0;
 }
 
 int getDiaSemanaE(Data d){
@@ -180,7 +182,7 @@ int diffDate(Data i, Data f){
         d = f.dia - i.dia;
         return d;
     }
-
+    return 0;
 }
 
 int validaData(Data d){
