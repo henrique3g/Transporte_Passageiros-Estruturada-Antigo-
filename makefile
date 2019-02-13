@@ -22,11 +22,11 @@ CC=gcc
  
 ifdef OS
 	RM = del objects\\*.o Sistema.exe
-	
+	ICO=ico.o -o
   else
   	ifeq ($(shell uname), Linux)
       RM = rm -f ./objects/*.o $(PROJ_NAME) *~
-	  
+	  	ICO=-o
    	endif
 endif
 
@@ -38,7 +38,7 @@ CC_FLAGS=-c -W -Wall -pedantic -g -I includes/
 all: $(PROJ_NAME)
  
 $(PROJ_NAME): $(OBJ) 
-	$(CC) $^ -o $@ 
+	$(CC) $^ $(ICO) $@ 
 
 
 ./objects/%.o: ./src/%.c

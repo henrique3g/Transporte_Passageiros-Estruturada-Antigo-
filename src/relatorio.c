@@ -178,7 +178,7 @@ void relOcupArq(){
 		if(f == 1){
 			sprintf(str, "|%s, %02d:%02d , Total no mês = %02d", lin.cid, lin.hora.h, lin.hora.m, soma);
 			fprintf(frel, "%-53s|\n",str);
-			fprintf(frel, "|Dom\tSeg%sTer%sQua%sQui%sSex%sSab |\n|", es, es, es, es, es);
+			fprintf(frel, "|Dom%sSeg%sTer%sQua%sQui%sSex%sSab |\n|",es,es,es,es,es,es);
 			for(int i = 0; i < 7; i++)
 				fprintf(frel, "%d/80%c",tot[i], i == 6?'|':'\t');
 			fprintf(frel, "\n+---------------------------------------------------+\n");

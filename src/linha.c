@@ -106,7 +106,7 @@ void consultarHorarios(){
     }else{
         while(fread(&lin, sizeof(lin), 1, flin)){
             if((!strcmp(lin.cid, cid)) && lin.ativo == 1){
-                printf("%d:%d\t%.2f R$\n",lin.hora.h,lin.hora.m,lin.vlr);
+                printf("%02d:%02d\t%.2f R$\n",lin.hora.h,lin.hora.m,lin.vlr);
                 est = 1;
             }
         }
