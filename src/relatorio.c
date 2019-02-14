@@ -110,7 +110,7 @@ void relOcupTela(){
 	cls();
 	printf("/////////////////////////////////////////////////////\n");
 	printf("//                                                 //\n");
-	printf("//     Relatório de ocupacao por dia da semana     //\n");
+	printf("//     Relatório de ocupação por dia da semana     //\n");
 	printf("//                                                 //\n");
 	printf("//                          Emissão: %02d/%02d/%04d    //\n", d.dia, d.mes, d.ano);
 	printf("/////////////////////////////////////////////////////\n");
@@ -159,7 +159,7 @@ void relOcupArq(){
 	FILE *frel = fopen(arq, "w");
 	fprintf(frel, "/////////////////////////////////////////////////////\n");
 	fprintf(frel, "//                                                 //\n");
-	fprintf(frel, "//     Relatório de ocupacao por dia da semana     //\n");
+	fprintf(frel, "//     Relatório de ocupação por dia da semana     //\n");
 	fprintf(frel, "//                                                 //\n");
 	fprintf(frel, "//                         Emissão: %02d/%02d/%04d     //\n", d.dia, d.mes, d.ano);
 	fprintf(frel, "/////////////////////////////////////////////////////\n");

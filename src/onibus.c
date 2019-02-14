@@ -162,7 +162,7 @@ void lerReserva(){
 		count = 0;
 		do{
 			c = getc(fo);
-			if(isChar(c) || c == ' '){
+			if(isChar(c) || c == ' ' || isCharNum(c) || c == '-'){
 				lin.cid[count] = c;
 				count++;
 			}
